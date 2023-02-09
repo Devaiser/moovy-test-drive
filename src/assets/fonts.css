@@ -1,0 +1,43 @@
+@font-face {
+  font-family: 'Fact';
+  src: local('Fact Light'), local('Fact-Light'),
+    url('/fonts/Fact-Light.woff2') format('woff2'),
+    url('/fonts/Fact-Light.woff') format('woff'),
+    url('/fonts/Fact-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Fact';
+  src: local('Fact Medium'), local('Fact-Medium'),
+    url('/fonts/Fact-Medium.woff2') format('woff2'),
+    url('/fonts/Fact-Medium.woff') format('woff'),
+    url('/fonts/Fact-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Fact';
+  src: local('Fact Bold'), local('Fact-Bold'),
+    url('/fonts/Fact-Bold.woff2') format('woff2'),
+    url('/fonts/Fact-Bold.woff') format('woff'),
+    url('/fonts/Fact-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Fact';
+  src: local('Fact Black'), local('Fact-Black'),
+    url('/fonts/Fact-Black.woff2') format('woff2'),
+    url('/fonts/Fact-Black.woff') format('woff'),
+    url('/fonts/Fact-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'chuterolk';
+  src: local('chuterolk'), local('chuterolk'),
+    url('/fonts/chuterolk.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
