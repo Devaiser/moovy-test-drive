@@ -2,15 +2,38 @@
   <main class="main">
     <section class="section">
       <Title />
-      <!-- <PromoScreen /> -->
-      <FormScreen />
+      <Transition mode="out-in">
+        <PromoScreen
+          v-if="activeScreen === 'promo'"
+          @submit="setActiveScreen('form')"
+        />
+        <FormScreen
+          v-else-if="activeScreen === 'form'"
+          @submit="setActiveScreen('referral')"
+        />
+        <ReferralScreen v-else-if="activeScreen === 'referral'" />
+      </Transition>
     </section>
   </main>
   <Footer />
 </template>
 
 <script setup>
-  import { Title, Footer, Timer, PromoScreen, FormScreen } from '@/components/';
+  import { ref } from 'vue';
+  import {
+    Title,
+    Footer,
+    Timer,
+    PromoScreen,
+    FormScreen,
+    ReferralScreen,
+  } from '@/components/';
+
+  const activeScreen = ref('promo');
+
+  const setActiveScreen = (screen) => {
+    activeScreen.value = screen;
+  };
 </script>
 
 <style scoped>

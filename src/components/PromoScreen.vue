@@ -1,5 +1,10 @@
 <template>
   <div class="promo-section">
+    <vue3-flip-countdown
+      :deadlineDate="deadline"
+      mainColor="#21E7D6"
+      :labels="{}"
+    />
     <h2 class="subtitle">
       join the whitelist to get access to an early version of the app
     </h2>
@@ -60,21 +65,31 @@
       </div>
     </div>
     <div class="promo-button">
-      <Button />
+      <Button @click="onSubmit" />
     </div>
   </div>
 </template>
 <script setup>
   import { Button } from '@/components';
+  const emit = defineEmits(['submit']);
+
+  const deadline = new Date(
+    'Fri Feb 11 2023 00:00:00 GMT+0300 (Москва, стандартное время)'
+  );
+
+  const onSubmit = () => {
+    emit('submit');
+  };
 </script>
 <style scoped>
   /* .promo-section {
-      margin-top: 40px;
-    } */
+                            margin-top: 40px;
+                          } */
   .subtitle {
     text-align: center;
     max-width: 620px;
     margin: 0 auto;
+    margin-top: 30px;
   }
   .promo-list {
     display: flex;

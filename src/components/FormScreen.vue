@@ -6,6 +6,11 @@
         is Coming: Join the <br />
         Waitlist
       </h2>
+      <vue3-flip-countdown
+        :deadlineDate="deadline"
+        mainColor="#21E7D6"
+        :labels="{}"
+      />
     </div>
     <div class="form__body">
       <div class="form__body-text">
@@ -48,7 +53,7 @@
               </p>
             </div>
             <div class="submit-button">
-              <Button />
+              <Button @click.prevent="onSubmit" />
             </div>
           </div>
         </form>
@@ -58,8 +63,21 @@
 </template>
 <script setup>
   import { Button } from '@/components';
+
+  const emit = defineEmits(['submit']);
+
+  const onSubmit = () => {
+    emit('submit');
+  };
+  const deadline = new Date(
+    'Fri Feb 11 2023 00:00:00 GMT+0300 (Москва, стандартное время)'
+  );
 </script>
 <style scoped>
+  .flip-clock {
+    margin: 0 !important;
+    margin-left: 80px !important;
+  }
   .form-section__subtitle {
     display: flex;
     justify-content: center;
