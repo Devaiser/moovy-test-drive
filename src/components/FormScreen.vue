@@ -2,8 +2,8 @@
   <div class="form-section">
     <div class="form-section__subtitle">
       <h2 class="subtitle">
-        moovy drive2earn app <br />
-        is Coming: Join the <br />
+        moovy drive2earn app <br class="desk" />
+        is Coming: Join the <br class="desk" />
         Waitlist
       </h2>
       <vue3-flip-countdown
@@ -21,6 +21,8 @@
         </span>
         <div class="form__image-wrapper">
           <img src="/img/form-image.png" alt="test-drive" class="image" />
+          <div class="gradient-left"></div>
+          <div class="gradient-right"></div>
         </div>
       </div>
       <div class="form-wrapper">
@@ -70,7 +72,7 @@
     emit('submit');
   };
   const deadline = new Date(
-    'Fri Feb 11 2023 00:00:00 GMT+0300 (Москва, стандартное время)'
+    'Fri Feb 15 2023 00:00:00 GMT+0300 (Москва, стандартное время)'
   );
 </script>
 <style scoped>
@@ -90,7 +92,7 @@
   }
   .form__body {
     display: flex;
-    margin-top: 20px;
+    margin-top: 40px;
   }
   .form__body-text {
     position: relative;
@@ -219,5 +221,92 @@
   }
   .submit-button {
     margin-top: 20px;
+  }
+  .gradient-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100%;
+    background: linear-gradient(to right, #000, rgba(0, 0, 0, 0));
+    z-index: 5;
+  }
+  .gradient-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100%;
+    background: linear-gradient(to left, #000, rgba(0, 0, 0, 0));
+    z-index: 5;
+  }
+  @media (max-width: 1200px) {
+    .desk {
+      display: none;
+    }
+    .form-section__subtitle {
+      flex-direction: column-reverse;
+    }
+    .flip-clock {
+      margin: 0 auto !important;
+    }
+    .subtitle {
+      margin-top: 40px;
+      text-align: center;
+      max-width: 600px;
+    }
+    .form-wrapper {
+      padding: 40px 30px;
+    }
+    .input-wrapper {
+      width: 100%;
+    }
+    .form__image-wrapper {
+      width: 50vw;
+      margin-top: 0px;
+    }
+  }
+  @media (max-width: 768px) {
+    .subtitle {
+      max-width: 550px;
+    }
+    .form__body {
+      margin-top: 40px;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form__body-text {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+    }
+    .form__body-text span {
+      text-align: center;
+      max-width: none;
+      margin: 0 auto;
+      width: 60vw;
+    }
+    .form__image-wrapper {
+      width: 80vw;
+      margin-left: 0;
+    }
+    .form-wrapper {
+      margin-left: 0px;
+    }
+  }
+  @media (max-width: 556px) {
+    .subtitle {
+      max-width: 450px;
+    }
+    .form__body-text span {
+      font-size: 16px;
+      width: 80vw;
+    }
+    .form__image-wrapper {
+      width: 100vw;
+    }
   }
 </style>

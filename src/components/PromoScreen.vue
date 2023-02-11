@@ -74,7 +74,7 @@
   const emit = defineEmits(['submit']);
 
   const deadline = new Date(
-    'Fri Feb 11 2023 00:00:00 GMT+0300 (Москва, стандартное время)'
+    'Fri Feb 15 2023 00:00:00 GMT+0300 (Москва, стандартное время)'
   );
 
   const onSubmit = () => {
@@ -82,9 +82,6 @@
   };
 </script>
 <style scoped>
-  /* .promo-section {
-                            margin-top: 40px;
-                          } */
   .subtitle {
     text-align: center;
     max-width: 620px;
@@ -183,5 +180,96 @@
   }
   .promo-button {
     margin-top: 40px;
+  }
+  @media (max-width: 1400px) {
+    .promo-item-body.big {
+      width: 400px;
+    }
+    .promo-item-body.small {
+      width: 300px;
+    }
+  }
+  @media (max-width: 1200px) {
+    .promo-item-body.big {
+      width: 33vw;
+    }
+    .promo-item-body.small {
+      width: 24vw;
+    }
+    .promo-item-body {
+      padding: 0 20px;
+      padding-bottom: 40px;
+    }
+    .promo-item-text {
+      margin-top: 160px;
+    }
+  }
+  @media (max-width: 992px) {
+    .promo-item-body {
+      height: 250px;
+    }
+    .promo-item-badge span {
+      font-size: 14px;
+    }
+    .promo-item-badge {
+      width: 136px;
+      height: 100px;
+      padding-bottom: 20px;
+    }
+    .promo-item-text {
+      margin-top: 140px;
+      font-size: 16px;
+    }
+  }
+  @media (max-width: 768px) {
+    .promo-list {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .promo-item-body {
+      margin: 0 auto;
+    }
+    .promo-item-body.big {
+      width: 100%;
+    }
+    .promo-item-body.small {
+      width: 100%;
+    }
+    .promo-item {
+      width: 60%;
+      position: relative;
+    }
+    .promo-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(to top, #000 15%, rgba(0, 0, 0, 0));
+      z-index: 0;
+    }
+    .promo-item:not(:last-child) {
+      margin-right: 0px;
+      margin-bottom: -40px;
+    }
+    .promo-img.phone {
+      width: 30%;
+      top: 25px;
+      margin-top: -40px;
+    }
+    .promo-item-text {
+      margin-top: 100px;
+      font-size: 16px;
+    }
+  }
+  @media (max-width: 556px) {
+    .promo-item {
+      width: 80%;
+    }
+    .promo-item-badge span {
+      font-size: 12px;
+    }
   }
 </style>

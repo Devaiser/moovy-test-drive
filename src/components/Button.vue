@@ -29,4 +29,10 @@
     font-size: 32px;
     line-height: 1.06;
   }
+  @media (max-width: 400px) {
+    .button {
+      width: 201px;
+      height: 47px;
+    }
+  }
 </style>

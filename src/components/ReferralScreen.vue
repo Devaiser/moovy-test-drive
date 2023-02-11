@@ -2,8 +2,8 @@
   <div class="form-section">
     <div class="form-section__subtitle">
       <h2 class="subtitle">
-        Share your reffeal link <br />
-        to climb the <br />
+        Share your reffeal link <br class="desk" />
+        to climb the <br class="desk" />
         leaderboard
       </h2>
       <div class="rank">
@@ -71,7 +71,7 @@
   }
   .form__body {
     display: flex;
-    margin-top: 20px;
+    margin-top: 40px;
   }
   .form__body-text {
     position: relative;
@@ -258,5 +258,74 @@
     font-size: 13px;
     line-height: 1.25;
     color: #b5d1d6;
+  }
+  @media (max-width: 1200px) {
+    .form__image-wrapper {
+      margin-left: 0;
+    }
+    .form-wrapper {
+      padding: 40px 30px;
+      margin-left: -90px;
+    }
+  }
+  @media (max-width: 768px) {
+    .form-section__subtitle {
+      flex-direction: column;
+    }
+    .subtitle {
+      text-align: center;
+    }
+    .rank {
+      margin-top: 40px;
+      margin-left: 0px;
+    }
+    .desk {
+      display: none;
+    }
+    .form__body {
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-wrapper {
+      margin-left: 0px;
+      margin-top: 40px;
+    }
+    .form__body-text {
+      position: relative;
+      z-index: 1;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+    }
+    .form__body-text span {
+      max-width: 406px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .form__image-wrapper {
+      width: 100vw;
+      margin: 0 auto;
+      margin-top: 40px;
+    }
+    .form {
+      width: 60vw;
+    }
+    .input-wrapper {
+      width: 100%;
+      max-width: none;
+    }
+  }
+  @media (max-width: 556px) {
+    .form {
+      width: 70vw;
+    }
+    .form__body-text span {
+      font-size: 16px;
+      padding: 0 20px;
+    }
+    .form__success {
+      width: 100%;
+      margin-top: 40px;
+    }
   }
 </style>
