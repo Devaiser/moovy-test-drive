@@ -29,18 +29,35 @@
         <form class="form">
           <div>
             <div class="input-wrapper">
-              <input type="text" class="form__input" placeholder="wallet" />
-              <div class="input__badge"><span>connected</span></div>
+              <input
+                disabled
+                type="text"
+                class="form__input"
+                placeholder="wallet"
+                v-model="accountAddress"
+              />
+              <Transition mode="out-in">
+                <div class="input__badge_connect" v-if="!accountAddress">
+                  <w3m-core-button></w3m-core-button>
+                </div>
+                <div class="input__badge" v-else><span>connected</span></div>
+              </Transition>
             </div>
             <div class="input-wrapper">
               <input
                 type="email"
                 class="form__input"
                 placeholder="your email"
+                v-model.trim="email"
               />
             </div>
             <div class="input-wrapper">
-              <input type="text" class="form__input" placeholder="name" />
+              <input
+                type="text"
+                class="form__input"
+                placeholder="name"
+                v-model.trim="name"
+              />
             </div>
           </div>
           <div>
@@ -64,7 +81,61 @@
   </div>
 </template>
 <script setup>
+  import { ref, watch, onMounted } from 'vue';
   import { Button } from '@/components';
+  import { configureChains, createClient } from '@wagmi/core';
+  import { arbitrum, mainnet, polygon } from '@wagmi/core/chains';
+
+  import { Web3Modal } from '@web3modal/html';
+
+  import {
+    EthereumClient,
+    modalConnectors,
+    walletConnectProvider,
+  } from '@web3modal/ethereum';
+
+  const PROJECT_ID = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
+
+  const chains = [arbitrum, mainnet, polygon];
+
+  // Wagmi Core Client
+  const { provider } = configureChains(chains, [
+    walletConnectProvider({ projectId: PROJECT_ID }),
+  ]);
+  const wagmiClient = createClient({
+    autoConnect: true,
+    connectors: modalConnectors({
+      projectId: PROJECT_ID,
+      version: '2',
+      appName: 'web3Modal',
+      chains,
+    }),
+    provider,
+  });
+
+  // Web3Modal and Ethereum Client
+  const ethereumClient = new EthereumClient(wagmiClient, chains);
+  const web3modal = new Web3Modal({ projectId: PROJECT_ID }, ethereumClient);
+
+  const unsubscribe = web3modal.subscribeModal((newState) =>
+    console.log(newState)
+  );
+  console.log(unsubscribe());
+
+  console.log(web3modal);
+  ethereumClient.watchAccount((newValue) => {
+    if (newValue.isConnected) {
+      accountAddress.value = newValue.address;
+    } else {
+      accountAddress.value = '';
+    }
+  });
+
+  const accountAddress = ref('');
+  const email = ref('');
+  const name = ref('');
+
+  console.log(ethereumClient.getAccount());
 
   const emit = defineEmits(['submit']);
 
@@ -171,6 +242,17 @@
     padding: 7px 10px;
     pointer-events: none;
   }
+  .input__badge_connect {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+    border-radius: 25.0888px;
+    justify-content: center;
+    align-items: center;
+    padding: 7px 10px;
+    pointer-events: none;
+  }
   .input__badge span {
     font-weight: 700;
     font-size: 14px;
@@ -194,6 +276,9 @@
     line-height: 1.25;
     color: #e0edf5;
     transition: all 0.3s ease 0s;
+  }
+  .form__input_wallet {
+    pointer-events: none;
   }
   .form__input:focus {
     box-shadow: 0px 0px 15px #21e7d6;
