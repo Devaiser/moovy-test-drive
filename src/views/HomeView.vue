@@ -21,50 +21,49 @@
 </template>
 
 <script setup>
-  import smoothscroll from 'smoothscroll-polyfill';
-  import { ref } from 'vue';
-  import {
-    Title,
-    Footer,
-    Timer,
-    PromoScreen,
-    FormScreen,
-    ReferralScreen,
-  } from '@/components/';
+import smoothscroll from 'smoothscroll-polyfill';
+import { ref } from 'vue';
+import {
+  Title,
+  Footer,
+  PromoScreen,
+  FormScreen,
+  ReferralScreen,
+} from '@/components/';
 
-  const activeScreen = ref('promo');
+const activeScreen = ref('promo');
 
-  const setActiveScreen = (screen) => {
-    smoothscroll.polyfill();
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-    activeScreen.value = screen;
-  };
+const setActiveScreen = (screen) => {
+  smoothscroll.polyfill();
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth',
+  });
+  activeScreen.value = screen;
+};
 </script>
 
 <style scoped>
-  .app-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: #000;
-    min-height: 100vh;
-  }
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #000;
+  min-height: 100vh;
+}
+.main {
+  background: #000;
+  padding: 0 40px;
+}
+.section {
+  /* min-height: 80vh; */
+  padding-top: 3%;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
   .main {
-    background: #000;
-    padding: 0 40px;
+    padding: 0 20px;
   }
-  .section {
-    /* min-height: 80vh; */
-    padding-top: 3%;
-    box-sizing: border-box;
-  }
-  @media (max-width: 768px) {
-    .main {
-      padding: 0 20px;
-    }
-  }
+}
 </style>
