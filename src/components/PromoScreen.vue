@@ -3,7 +3,7 @@
     <vue3-flip-countdown
       :deadlineDate="deadline"
       mainColor="#21E7D6"
-      :labels="{}"
+      :showLabels="false"
     />
     <h2 class="subtitle">
       join the whitelist to get access to an early version of the app

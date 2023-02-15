@@ -50,7 +50,17 @@
 import { ref } from 'vue';
 import { useClipboard } from '@vueuse/core';
 
-const referralLink = ref('https://beta.moovy.io/ref/132');
+const props = defineProps({
+  refLink: {
+    type: String,
+    required: true,
+  },
+});
+
+console.log(props.refLink);
+
+const referralLink = ref(props.refLink);
+
 const { copy, copied } = useClipboard({
   source: referralLink.value,
   copiedDuring: 3000,

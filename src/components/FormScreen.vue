@@ -9,7 +9,7 @@
       <vue3-flip-countdown
         :deadlineDate="deadline"
         mainColor="#21E7D6"
-        :labels="{}"
+        :showLabels="false"
       />
     </div>
     <div class="form__body">
@@ -26,74 +26,115 @@
         </div>
       </div>
       <div class="form-wrapper">
-        <form class="form">
-          <div>
-            <div class="input-wrapper">
-              <input
-                type="text"
-                class="form__input"
-                placeholder="wallet"
-                v-model="accountAddress"
-              />
-              <Transition mode="out-in">
-                <div class="input__badge_connect" v-if="!accountAddress">
-                  <w3m-core-button></w3m-core-button>
-                </div>
-                <div class="input__badge" v-else><span>connected</span></div>
-              </Transition>
-            </div>
-            <span class="input__error" v-if="isAddressInvalid"
-              >Please connect your wallet</span
-            >
-            <div class="input-wrapper">
-              <input
-                type="email"
-                class="form__input"
-                placeholder="your email"
-                v-model.trim="email"
-              />
-              <span class="input__error" v-if="isEmailInvalid"
-                >Email is invalid</span
+        <Transition mode="out-in">
+          <form class="form" v-if="isRegisterFormVisible">
+            <div>
+              <div class="input-wrapper">
+                <input
+                  disabled
+                  type="text"
+                  class="form__input"
+                  placeholder="wallet"
+                  v-model="accountAddress"
+                />
+                <Transition mode="out-in">
+                  <div class="input__badge_connect" v-if="!accountAddress">
+                    <w3m-core-button></w3m-core-button>
+                  </div>
+                  <div class="input__badge" v-else><span>connected</span></div>
+                </Transition>
+              </div>
+              <span class="input__error" v-if="isAddressInvalid"
+                >Please connect your wallet</span
               >
-              <span class="input__error" v-if="emailMessage">{{
-                emailMessage
-              }}</span>
-            </div>
-            <div class="input-wrapper">
-              <input
-                type="text"
-                class="form__input"
-                placeholder="name"
-                v-model.trim="name"
-              />
-              <span class="input__error" v-if="isNameInvalid"
-                >Please enter your name</span
-              >
-            </div>
-          </div>
-          <div>
-            <div class="checkbox-input-wrapper">
-              <input type="checkbox" v-model="checkbox" />
-              <p>
-                Yes, please send me the latest news about Moovy. <br />
-                I understand I can unsubscribe at any time.
-                <router-link to="/agreements" class="link"
-                  >Privacy Policy</router-link
+              <div class="input-wrapper">
+                <input
+                  type="email"
+                  class="form__input"
+                  placeholder="your email"
+                  v-model.trim="email"
+                />
+                <span class="input__error" v-if="isEmailInvalid"
+                  >Email is invalid</span
                 >
-              </p>
+                <span class="input__error" v-if="emailMessage">{{
+                  emailMessage
+                }}</span>
+              </div>
+              <div class="input-wrapper">
+                <input
+                  type="text"
+                  class="form__input"
+                  placeholder="name"
+                  v-model.trim="name"
+                />
+                <span class="input__error" v-if="isNameInvalid"
+                  >Please enter your name</span
+                >
+              </div>
             </div>
-            <span class="input__error" v-if="isCheckboxInvalid"
-              >This is a required field</span
-            >
-            <span class="input__error" v-if="internalError">{{
-              internalError
-            }}</span>
+            <div>
+              <div class="checkbox-input-wrapper">
+                <input type="checkbox" v-model="checkbox" />
+                <p>
+                  Yes, please send me the latest news about Moovy. <br />
+                  I understand I can unsubscribe at any time.
+                  <router-link to="/agreements" class="link"
+                    >Privacy Policy</router-link
+                  >
+                </p>
+              </div>
+              <span class="input__error" v-if="isCheckboxInvalid"
+                >This is a required field</span
+              >
+              <span class="input__error" v-if="internalError">{{
+                internalError
+              }}</span>
 
-            <div class="submit-button">
-              <Button @click.prevent="onSubmit" />
+              <div class="submit-button">
+                <Transition mode="out-in">
+                  <Button @click.prevent="onSubmit" v-if="!isLoading" />
+                  <div class="loading" v-else>
+                    <img src="/img/loading.svg" alt="loading" class="image" />
+                  </div>
+                </Transition>
+              </div>
+              <div class="text_blue" @click="isRegisterFormVisible = false">
+                Already have an account
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+          <form class="form" v-else>
+            <div>
+              <div class="input-wrapper">
+                <input
+                  type="email"
+                  class="form__input"
+                  placeholder="your email"
+                  v-model.trim="emailLogin"
+                />
+                <span class="input__error" v-if="isEmailInvalid"
+                  >Email is invalid</span
+                >
+                <span class="input__error" v-if="emailMessage">{{
+                  emailMessage
+                }}</span>
+              </div>
+            </div>
+            <div>
+              <span class="input__error" v-if="internalError">{{
+                internalError
+              }}</span>
+
+              <div class="submit-button">
+                <Button @click.prevent="onSubmitLogin" />
+              </div>
+              <div class="text_blue" @click="isRegisterFormVisible = true">
+                No account create one now
+              </div>
+            </div>
+          </form>
+        </Transition>
       </div>
     </div>
   </div>
@@ -111,6 +152,8 @@ import {
   modalConnectors,
   walletConnectProvider,
 } from '@web3modal/ethereum';
+
+const isLoading = ref(false);
 
 const PROJECT_ID = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 
@@ -149,6 +192,10 @@ ethereumClient.watchAccount((newValue) => {
   }
 });
 
+const emailLogin = ref('');
+
+const isRegisterFormVisible = ref(true);
+
 const accountAddress = ref('');
 const email = ref('');
 const name = ref('');
@@ -178,11 +225,11 @@ const onSubmit = async () => {
     ? (isCheckboxInvalid.value = true)
     : (isCheckboxInvalid.value = false);
   if (
-    !isAddressInvalid.value &&
     !isEmailInvalid.value &&
     !isNameInvalid.value &&
     !isCheckboxInvalid.value
   ) {
+    isLoading.value = true;
     await fetch('https://moovylanding.herokuapp.com/saveUser', {
       method: 'POST',
       headers: {
@@ -206,14 +253,17 @@ const onSubmit = async () => {
         } else {
           emit('submit', res.message);
         }
+        isLoading.value = false;
       })
       .catch((err) => {
         console.log(err);
         internalError.value =
           'Ops... Something went wrong. Please try again later';
+        isLoading.value = false;
       });
   }
 };
+const onSubmitLogin = () => {};
 const deadline = new Date(
   'Fri Feb 27 2023 03:00:00 GMT+0300 (Москва, стандартное время)'
 );
@@ -241,6 +291,7 @@ const deadline = new Date(
   position: relative;
   z-index: 1;
   width: 60vw;
+  height: 30vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -382,8 +433,28 @@ const deadline = new Date(
 .checkbox-input-wrapper .link {
   color: #21e7d6;
 }
+.text_blue {
+  width: fit-content;
+  margin: 0 auto;
+  display: block;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.25;
+  color: #21e7d6;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+.text_blue:hover {
+  text-decoration: underline;
+}
 .submit-button {
   margin-top: 20px;
+  display: flex;
+}
+.loading {
+  width: 50px;
+  margin: 0 auto;
 }
 .gradient-left {
   position: absolute;
@@ -428,6 +499,9 @@ const deadline = new Date(
     width: 50vw;
     margin-top: 0px;
   }
+  .form__body-text {
+    height: 40vw;
+  }
 }
 @media (max-width: 768px) {
   .subtitle {
@@ -445,6 +519,7 @@ const deadline = new Date(
     justify-content: center;
     align-items: center;
     width: 100vw;
+    height: auto;
   }
   .form__body-text span {
     text-align: center;
