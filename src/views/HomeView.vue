@@ -8,10 +8,15 @@
             v-if="activeScreen === 'promo'"
             @submit="setActiveScreen('form')"
           />
-          <FormScreen v-else-if="activeScreen === 'form'" @submit="onSubmit" />
+          <FormScreen
+            v-else-if="activeScreen === 'form'"
+            @submit="onSubmit"
+            @submitLogin="onSubmitLogin"
+          />
           <ReferralScreen
             v-else-if="activeScreen === 'referral'"
             :refLink="refLink"
+            :rank="refRank"
           />
         </Transition>
       </section>
@@ -44,10 +49,17 @@ const setActiveScreen = (screen) => {
 };
 
 const refLink = ref(null);
+const refRank = ref(0);
 
-const onSubmit = (message) => {
+const onSubmit = (message, rank) => {
   setActiveScreen('referral');
   refLink.value = `https://beta.moovy.io/${message}`;
+  refRank.value = rank;
+};
+const onSubmitLogin = (rank, ref) => {
+  setActiveScreen('referral');
+  refLink.value = `https://beta.moovy.io/${ref}`;
+  refRank.value = rank;
 };
 </script>
 

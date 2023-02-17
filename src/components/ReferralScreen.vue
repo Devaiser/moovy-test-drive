@@ -8,7 +8,7 @@
       </h2>
       <div class="rank">
         <p class="rank__subtitle">Your rank:</p>
-        <p class="rank__result">0</p>
+        <p class="rank__result">{{ rank }}</p>
       </div>
     </div>
     <div class="form__body">
@@ -53,6 +53,10 @@ import { useClipboard } from '@vueuse/core';
 const props = defineProps({
   refLink: {
     type: String,
+    required: true,
+  },
+  rank: {
+    type: Number,
     required: true,
   },
 });

@@ -99,7 +99,7 @@
                   </div>
                 </Transition>
               </div>
-              <div class="text_blue" @click="isRegisterFormVisible = false">
+              <div class="text_blue" @click="toggleForm(false)">
                 Already have an account
               </div>
             </div>
@@ -113,23 +113,26 @@
                   placeholder="your email"
                   v-model.trim="emailLogin"
                 />
-                <span class="input__error" v-if="isEmailInvalid"
+                <span class="input__error" v-if="isLoginEmailInvalid"
                   >Email is invalid</span
                 >
-                <span class="input__error" v-if="emailMessage">{{
-                  emailMessage
+                <span class="input__error" v-if="emailMessageLogin">{{
+                  emailMessageLogin
                 }}</span>
               </div>
             </div>
             <div>
-              <span class="input__error" v-if="internalError">{{
-                internalError
+              <span class="input__error" v-if="internalErrorLogin">{{
+                internalErrorLogin
               }}</span>
 
               <div class="submit-button">
-                <Button @click.prevent="onSubmitLogin" />
+                <Button @click.prevent="onSubmitLogin" v-if="!isLoading" />
+                <div class="loading" v-else>
+                  <img src="/img/loading.svg" alt="loading" class="image" />
+                </div>
               </div>
-              <div class="text_blue" @click="isRegisterFormVisible = true">
+              <div class="text_blue" @click="toggleForm(true)">
                 No account create one now
               </div>
             </div>
@@ -192,7 +195,16 @@ ethereumClient.watchAccount((newValue) => {
   }
 });
 
+const toggleForm = (value) => {
+  isRegisterFormVisible.value = value;
+  isLoading.value = false;
+};
+
 const emailLogin = ref('');
+
+const emailMessageLogin = ref('');
+const internalErrorLogin = ref('');
+const isLoginEmailInvalid = ref('');
 
 const isRegisterFormVisible = ref(true);
 
@@ -211,7 +223,9 @@ const internalError = ref('');
 
 console.log(ethereumClient.getAccount());
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit', 'submitLogin']);
+
+const url = 'https://moovylanding.herokuapp.com';
 
 const onSubmit = async () => {
   !accountAddress.value
@@ -230,7 +244,7 @@ const onSubmit = async () => {
     !isCheckboxInvalid.value
   ) {
     isLoading.value = true;
-    await fetch('https://moovylanding.herokuapp.com/saveUser', {
+    await fetch(`${url}/saveUser`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -251,7 +265,7 @@ const onSubmit = async () => {
           internalError.value =
             'Ops... Something went wrong. Please try again later';
         } else {
-          emit('submit', res.message);
+          emit('submit', res.message, res.rank);
         }
         isLoading.value = false;
       })
@@ -263,7 +277,43 @@ const onSubmit = async () => {
       });
   }
 };
-const onSubmitLogin = () => {};
+const onSubmitLogin = async () => {
+  !/^[^@]+@\w+(\.\w+)+\w$/.test(emailLogin.value)
+    ? (isLoginEmailInvalid.value = true)
+    : (isLoginEmailInvalid.value = false);
+  if (!isLoginEmailInvalid.value) {
+    isLoading.value = true;
+    await fetch(`${url}/login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: emailLogin.value,
+      }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        if (res.message === 'User not exist') {
+          emailMessageLogin.value = 'User not exists';
+        } else if (res.message === 'Internal error') {
+          internalErrorLogin.value =
+            'Ops... Something went wrong. Please try again later';
+        } else {
+          emit('submitLogin', res.message, res.ref_link);
+        }
+        isLoading.value = false;
+      })
+      .catch((err) => {
+        isLoading.value = false;
+        internalErrorLogin.value =
+          'Ops... Something went wrong. Please try again later';
+        console.log(err);
+      });
+  }
+};
 const deadline = new Date(
   'Fri Feb 27 2023 03:00:00 GMT+0300 (Москва, стандартное время)'
 );
