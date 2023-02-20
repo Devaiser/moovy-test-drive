@@ -53,12 +53,16 @@ const refRank = ref(0);
 
 const onSubmit = (message, rank) => {
   setActiveScreen('referral');
-  refLink.value = `https://beta.moovy.io/${message}`;
+  refLink.value = `${window.location.host}?ref=${message}`;
+  // refLink.value = `http://127.0.0.1:5173?ref=${message}`;
+  // refLink.value = `https://beta.moovy.io?ref=${message}`;
   refRank.value = rank;
 };
 const onSubmitLogin = (rank, ref) => {
   setActiveScreen('referral');
-  refLink.value = `https://beta.moovy.io/${ref}`;
+  refLink.value = `${window.location.host}?ref=${ref}`;
+  // refLink.value = `http://127.0.0.1:5173?ref=${ref}`;
+  // refLink.value = `https://beta.moovy.io?ref=${ref}`;
   refRank.value = rank;
 };
 </script>

@@ -35,11 +35,8 @@
               <span>{{ copied ? 'copied' : 'copy' }}</span>
             </div>
           </div>
-          <div class="form__text">
-            <p>&bull; Moovy will inittialy a.........</p>
-          </div>
           <div class="form__success">
-            <span>You’ll be notified</span>
+            <a href="https://moovy.io/" target="_blank">Continue</a>
           </div>
         </form>
       </div>
@@ -266,11 +263,16 @@ const { copy, copied } = useClipboard({
   position: relative;
   margin-top: 100px;
 }
-.form__success span {
+.form__success a {
   font-weight: 400;
   font-size: 13px;
   line-height: 1.25;
   color: #b5d1d6;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @media (max-width: 1200px) {
   .form__image-wrapper {

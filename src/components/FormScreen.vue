@@ -29,7 +29,10 @@
         <Transition mode="out-in">
           <form class="form" v-if="isRegisterFormVisible">
             <div>
-              <div class="input-wrapper">
+              <div
+                class="input-wrapper"
+                :class="{ 'input-wrapper_wallet': accountAddress }"
+              >
                 <input
                   disabled
                   type="text"
@@ -42,6 +45,25 @@
                     <w3m-core-button></w3m-core-button>
                   </div>
                   <div class="input__badge" v-else><span>connected</span></div>
+                </Transition>
+                <Transition mode="out-in">
+                  <div
+                    class="wallet-disconnect"
+                    v-if="accountAddress"
+                    @click="disconnectWallet"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      class="image"
+                      fill="#fff"
+                    >
+                      <title>exit-to-app</title>
+                      <path
+                        d="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z"
+                      />
+                    </svg>
+                  </div>
                 </Transition>
               </div>
               <span class="input__error" v-if="isAddressInvalid"
@@ -143,10 +165,11 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Button } from '@/components';
 import { configureChains, createClient } from '@wagmi/core';
 import { arbitrum, mainnet, polygon } from '@wagmi/core/chains';
+import { useRoute } from 'vue-router';
 
 import { Web3Modal } from '@web3modal/html';
 
@@ -155,6 +178,8 @@ import {
   modalConnectors,
   walletConnectProvider,
 } from '@web3modal/ethereum';
+
+const route = useRoute();
 
 const isLoading = ref(false);
 
@@ -181,13 +206,13 @@ const wagmiClient = createClient({
 const ethereumClient = new EthereumClient(wagmiClient, chains);
 const web3modal = new Web3Modal({ projectId: PROJECT_ID }, ethereumClient);
 
-const unsubscribe = web3modal.subscribeModal((newState) =>
-  console.log(newState)
-);
-console.log(unsubscribe());
-
 console.log(web3modal);
+
+const disconnectWallet = () => {
+  ethereumClient.disconnect();
+};
 ethereumClient.watchAccount((newValue) => {
+  console.log(newValue);
   if (newValue.isConnected) {
     accountAddress.value = newValue.address;
   } else {
@@ -199,6 +224,13 @@ const toggleForm = (value) => {
   isRegisterFormVisible.value = value;
   isLoading.value = false;
 };
+
+const refCode = ref(null);
+
+onMounted(() => {
+  refCode.value = route.query.ref;
+  console.log('ref', refCode.value);
+});
 
 const emailLogin = ref('');
 
@@ -254,6 +286,7 @@ const onSubmit = async () => {
         email: email.value,
         address: accountAddress.value,
         name: name.value,
+        ref: refCode.value,
       }),
     })
       .then((res) => res.json())
@@ -399,6 +432,26 @@ const deadline = new Date(
   width: 30vw;
   max-width: 538px;
   position: relative;
+  transition: all 0.3s ease 0s;
+}
+.input-wrapper_wallet {
+  position: relative;
+  width: calc(100% - 62.5px) !important;
+}
+
+.wallet-disconnect {
+  position: absolute;
+  margin-left: 10px;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52.5px;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  border-radius: 10px;
+  background: #161618;
+  cursor: pointer;
 }
 .input-wrapper:not(:first-child) {
   margin-top: 30px;
