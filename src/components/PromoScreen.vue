@@ -65,7 +65,8 @@
       </div>
     </div>
     <div class="promo-button">
-      <Button @click="onSubmit" />
+      <!-- <Button @click="onSubmit" /> -->
+      <p class="subtitle">beta if full</p>
     </div>
   </div>
 </template>

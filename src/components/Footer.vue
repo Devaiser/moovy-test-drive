@@ -7,7 +7,7 @@
       <p class="footer__social-text">Social media</p>
       <div class="footer__social-list">
         <a
-          href="https://t.me/moovy_io"
+          href="https://t.me/moovyglobal"
           target="_blank"
           class="footer__social-item"
         >
